@@ -14,6 +14,10 @@ namespace DarkPad
     {
         private bool isSaved = false;
         private string currentFilePath;
+        private Color currFontColor = Color.FromArgb(255, 255, 255);
+        private Color currBackColor = Color.FromArgb(40, 40, 40);
+        private Font currFont = DarkPad.DefaultFont;
+        private bool isStatusStripVisible = true;
 
         public DarkPad()
         {
@@ -81,6 +85,9 @@ namespace DarkPad
 
         #region Edit
 
+        //does'nt properly work
+        //make it undo a word at a time instead of whole sentence.
+        //Add redo option and a keyboard shortcut for it in the next release.
         private void undoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             richTextBox1.Undo();
@@ -118,12 +125,99 @@ namespace DarkPad
 
         private void insertDateTimeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DateTimeConverter dtc = new DateTimeConverter();
-            string datetime = dtc.ConvertToString(DateTime.Now);
+            string datetime = DateTime.Now.ToString();
+            int currPos = richTextBox1.SelectionStart;
+            richTextBox1.Text = richTextBox1.Text.Insert(richTextBox1.SelectionStart, datetime);
+            richTextBox1.SelectionStart = currPos + datetime.Length;
+        }
 
+
+
+        #endregion
+
+
+        #region Format
+
+        //this method needs reimplementing
+        private void fontToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FontDialog fd = new FontDialog();
+            if (fd.ShowDialog() != DialogResult.Cancel)
+                currFont = fd.Font;
+            richTextBox1.Font = currFont;
+        }
+
+        private void textToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ColorDialog cd = new ColorDialog();
+            if (cd.ShowDialog() != DialogResult.Cancel)
+                currFontColor = cd.Color;
+            richTextBox1.ForeColor = currFontColor;
+        }
+
+        private void backgroundToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ColorDialog cd = new ColorDialog();
+            if (cd.ShowDialog() != DialogResult.Cancel)
+                currBackColor = cd.Color;
+            richTextBox1.BackColor = currBackColor;
+        }
+
+
+
+
+        #endregion
+
+
+        #region View
+
+        private void zoomInToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox1.ZoomFactor += 0.05F;
+        }
+
+        private void zoomOutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox1.ZoomFactor -= 0.05F;
+        }
+
+        private void restoreDefaultZoomToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox1.ZoomFactor = 1.0F;
+        }
+
+        private void statusBarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(isStatusStripVisible)
+            {
+                statusBarToolStripMenuItem.Checked = false;
+                statusStrip1.Visible = false;
+                isStatusStripVisible = false;
+            }
+            else
+            {
+                statusBarToolStripMenuItem.Checked = true;
+                statusStrip1.Visible = true;
+                isStatusStripVisible = true;
+            }
         }
 
         #endregion
+
+        #region Help
+
+        private void sendFeedbackToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Feature in progress😅", "Oh snap!!", MessageBoxButtons.OK);
+        }
+
+        private void aboutDarkPadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("A simple alternative to Windows Notepad with a Dark Theme", "DarkPad v0.5 Beta", MessageBoxButtons.OK, MessageBoxIcon.Question);
+        }
+
+        #endregion
+
 
     }
 }
