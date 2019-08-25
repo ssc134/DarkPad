@@ -104,6 +104,8 @@
             this.fileLabel.ShowDropDownArrow = false;
             this.fileLabel.Size = new System.Drawing.Size(36, 24);
             this.fileLabel.Text = "File";
+            this.fileLabel.Click += new System.EventHandler(this.fileLabel_Click);
+            this.fileLabel.MouseHover += new System.EventHandler(this.fileLabel_MouseHover);
             // 
             // newToolStripMenuItem
             // 
@@ -172,6 +174,8 @@
             this.editLabel.ShowDropDownArrow = false;
             this.editLabel.Size = new System.Drawing.Size(39, 24);
             this.editLabel.Text = "Edit";
+            this.editLabel.Click += new System.EventHandler(this.editLabel_Click);
+            this.editLabel.MouseHover += new System.EventHandler(this.editLabel_MouseHover);
             // 
             // undoToolStripMenuItem
             // 
@@ -255,6 +259,8 @@
             this.formatLabel.ShowDropDownArrow = false;
             this.formatLabel.Size = new System.Drawing.Size(60, 24);
             this.formatLabel.Text = "Format";
+            this.formatLabel.Click += new System.EventHandler(this.formatLabel_Click);
+            this.formatLabel.MouseHover += new System.EventHandler(this.formatLabel_MouseHover);
             // 
             // fontToolStripMenuItem
             // 
@@ -297,6 +303,8 @@
             this.viewLabel.ShowDropDownArrow = false;
             this.viewLabel.Size = new System.Drawing.Size(45, 24);
             this.viewLabel.Text = "View";
+            this.viewLabel.Click += new System.EventHandler(this.viewLabel_Click);
+            this.viewLabel.MouseHover += new System.EventHandler(this.viewLabel_MouseHover);
             // 
             // zoomToolStripMenuItem
             // 
@@ -350,39 +358,45 @@
             this.helpLabel.ShowDropDownArrow = false;
             this.helpLabel.Size = new System.Drawing.Size(45, 24);
             this.helpLabel.Text = "Help";
+            this.helpLabel.Click += new System.EventHandler(this.helpLabel_Click);
+            this.helpLabel.MouseHover += new System.EventHandler(this.helpLabel_MouseHover);
             // 
             // sendFeedbackToolStripMenuItem
             // 
             this.sendFeedbackToolStripMenuItem.Name = "sendFeedbackToolStripMenuItem";
-            this.sendFeedbackToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
+            this.sendFeedbackToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
             this.sendFeedbackToolStripMenuItem.Text = "Send Feedback";
             this.sendFeedbackToolStripMenuItem.Click += new System.EventHandler(this.sendFeedbackToolStripMenuItem_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(213, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(181, 6);
             // 
             // aboutDarkPadToolStripMenuItem
             // 
             this.aboutDarkPadToolStripMenuItem.Name = "aboutDarkPadToolStripMenuItem";
-            this.aboutDarkPadToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
+            this.aboutDarkPadToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
             this.aboutDarkPadToolStripMenuItem.Text = "About DarkPad";
             this.aboutDarkPadToolStripMenuItem.Click += new System.EventHandler(this.aboutDarkPadToolStripMenuItem_Click);
             // 
             // richTextBox1
             // 
+            this.richTextBox1.AcceptsTab = true;
             this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.richTextBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.richTextBox1.Font = new System.Drawing.Font("Consolas", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBox1.AutoWordSelection = true;
+            this.richTextBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.richTextBox1.EnableAutoDragDrop = true;
+            this.richTextBox1.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBox1.ForeColor = System.Drawing.Color.White;
             this.richTextBox1.Location = new System.Drawing.Point(0, 30);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.Size = new System.Drawing.Size(982, 524);
             this.richTextBox1.TabIndex = 7;
             this.richTextBox1.Text = "";
+            this.richTextBox1.Click += new System.EventHandler(this.richTextBox1_Click);
             // 
             // statusStrip1
             // 

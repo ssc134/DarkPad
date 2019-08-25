@@ -18,25 +18,34 @@ namespace DarkPad
         private Color currBackColor = Color.FromArgb(40, 40, 40);
         private Font currFont = DarkPad.DefaultFont;
         private bool isStatusStripVisible = true;
+        private bool isMouseHovered = false;
 
         public DarkPad()
         {
             InitializeComponent();
         }
 
-
+        #region Click
+  
         #region File
+
+        private void fileLabel_Click(object sender, EventArgs e)
+        {
+            isMouseHovered = true;
+        }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DarkPad newInstance = new DarkPad();
             newInstance.Show();
+            isMouseHovered = false;
         }
 
         private void newWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DarkPad newInstance = new DarkPad();
             newInstance.Show();
+            isMouseHovered = false;
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -45,6 +54,7 @@ namespace DarkPad
             dialog.ShowDialog();
             string filepath = dialog.FileName;
             richTextBox1.Text = System.IO.File.ReadAllText(filepath);
+            isMouseHovered = false;
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
@@ -59,6 +69,7 @@ namespace DarkPad
             }
         
             System.IO.File.WriteAllText(currentFilePath, richTextBox1.Text);
+            isMouseHovered = false;
         }
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -73,6 +84,7 @@ namespace DarkPad
                 isSaved = true;
             }
             System.IO.File.WriteAllText(filePath, richTextBox1.Text);
+            isMouseHovered = false;
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -85,42 +97,54 @@ namespace DarkPad
 
         #region Edit
 
+        private void editLabel_Click(object sender, EventArgs e)
+        {
+            isMouseHovered = true;
+        }
+
         //does'nt properly work
         //make it undo a word at a time instead of whole sentence.
         //Add redo option and a keyboard shortcut for it in the next release.
         private void undoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             richTextBox1.Undo();
+            isMouseHovered = false;
         }
 
         private void cutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             richTextBox1.Cut();
+            isMouseHovered = false;
         }
 
         private void copyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             richTextBox1.Copy();
+            isMouseHovered = false;
         }
 
         private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             richTextBox1.Paste();
+            isMouseHovered = false;
         }
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SendKeys.Send("{DELETE}");
+            isMouseHovered = false;
         }
 
         private void findToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Feature still in progress", "Snap!", MessageBoxButtons.OK);
+            isMouseHovered = false;
         }
 
         private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SendKeys.Send("^a");
+            isMouseHovered = false;
         }
 
         private void insertDateTimeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -129,6 +153,7 @@ namespace DarkPad
             int currPos = richTextBox1.SelectionStart;
             richTextBox1.Text = richTextBox1.Text.Insert(richTextBox1.SelectionStart, datetime);
             richTextBox1.SelectionStart = currPos + datetime.Length;
+            isMouseHovered = false;
         }
 
 
@@ -138,6 +163,11 @@ namespace DarkPad
 
         #region Format
 
+        private void formatLabel_Click(object sender, EventArgs e)
+        {
+            isMouseHovered = true;
+        }
+
         //this method needs reimplementing
         private void fontToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -145,6 +175,7 @@ namespace DarkPad
             if (fd.ShowDialog() != DialogResult.Cancel)
                 currFont = fd.Font;
             richTextBox1.Font = currFont;
+            isMouseHovered = false;
         }
 
         private void textToolStripMenuItem_Click(object sender, EventArgs e)
@@ -153,6 +184,7 @@ namespace DarkPad
             if (cd.ShowDialog() != DialogResult.Cancel)
                 currFontColor = cd.Color;
             richTextBox1.ForeColor = currFontColor;
+            isMouseHovered = false;
         }
 
         private void backgroundToolStripMenuItem_Click(object sender, EventArgs e)
@@ -161,6 +193,7 @@ namespace DarkPad
             if (cd.ShowDialog() != DialogResult.Cancel)
                 currBackColor = cd.Color;
             richTextBox1.BackColor = currBackColor;
+            isMouseHovered = false;
         }
 
 
@@ -171,19 +204,27 @@ namespace DarkPad
 
         #region View
 
+        private void viewLabel_Click(object sender, EventArgs e)
+        {
+            isMouseHovered = true;
+        }
+
         private void zoomInToolStripMenuItem_Click(object sender, EventArgs e)
         {
             richTextBox1.ZoomFactor += 0.05F;
+            isMouseHovered = false;
         }
 
         private void zoomOutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             richTextBox1.ZoomFactor -= 0.05F;
+            isMouseHovered = false;
         }
 
         private void restoreDefaultZoomToolStripMenuItem_Click(object sender, EventArgs e)
         {
             richTextBox1.ZoomFactor = 1.0F;
+            isMouseHovered = false;
         }
 
         private void statusBarToolStripMenuItem_Click(object sender, EventArgs e)
@@ -200,24 +241,71 @@ namespace DarkPad
                 statusStrip1.Visible = true;
                 isStatusStripVisible = true;
             }
+            isMouseHovered = false;
         }
 
         #endregion
 
+
         #region Help
+
+        private void helpLabel_Click(object sender, EventArgs e)
+        {
+            isMouseHovered = true;
+        }
 
         private void sendFeedbackToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Feature in progress😅", "Oh snap!!", MessageBoxButtons.OK);
+            isMouseHovered = false;
         }
 
         private void aboutDarkPadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show("A simple alternative to Windows Notepad with a Dark Theme", "DarkPad v0.5 Beta", MessageBoxButtons.OK, MessageBoxIcon.Question);
+            isMouseHovered = false;
         }
 
         #endregion
 
+        #region RichtextBox1
+        private void richTextBox1_Click(object sender, EventArgs e)
+        {
+            isMouseHovered = false;
+        }
+        #endregion
+        #endregion
 
+        #region MouseHover
+        private void fileLabel_MouseHover(object sender, EventArgs e)
+        {
+            if (isMouseHovered == true)
+                fileLabel.ShowDropDown();
+        }
+        private void editLabel_MouseHover(object sender, EventArgs e)
+        {
+            if (isMouseHovered == true)
+                editLabel.ShowDropDown();
+        }
+        private void formatLabel_MouseHover(object sender, EventArgs e)
+        {
+            if (isMouseHovered == true)
+                formatLabel.ShowDropDown();
+        }
+        private void viewLabel_MouseHover(object sender, EventArgs e)
+        {
+            if (isMouseHovered == true)
+                viewLabel.ShowDropDown();
+        }
+        private void helpLabel_MouseHover(object sender, EventArgs e)
+        {
+            if (isMouseHovered == true)
+                helpLabel.ShowDropDown();
+        }
+
+
+        #endregion
+
+        
     }
 }
