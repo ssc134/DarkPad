@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace DarkPad
 {
+   
     public partial class DarkPad : Form
     {
         private bool isSaved = false;
@@ -17,13 +18,23 @@ namespace DarkPad
         private Color currFontColor = Color.FromArgb(255, 255, 255);
         private Color currBackColor = Color.FromArgb(40, 40, 40);
         private Font currFont = DarkPad.DefaultFont;
-        private bool isStatusStripVisible = true;
+        private bool isStatusStripVisible = false;
         private bool isMouseHovered = false;
+        //        private bool isFileLabelClicked = false;
+        private bool isTextSelected = false;
+        private string pattern  = "";
+        bool caseSensitiveFind;
 
         public DarkPad()
         {
             InitializeComponent();
         }
+        public DarkPad(string path)
+        {
+            InitializeComponent();
+            richTextBox1.Text = System.IO.File.ReadAllText(path);
+        }
+            
 
         #region Click
   
@@ -32,6 +43,11 @@ namespace DarkPad
         private void fileLabel_Click(object sender, EventArgs e)
         {
             isMouseHovered = true;
+ //           fileLabel.BackColor = Color.FromArgb(45, 45, 45);
+//            fileLabel.ForeColor = Color.White;
+ //           fileLabel.DropDown.BackColor = Color.FromArgb(55, 55, 55);
+//            fileLabel.DropDown.ForeColor = Color.White;
+
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
@@ -43,8 +59,9 @@ namespace DarkPad
 
         private void newWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DarkPad newInstance = new DarkPad();
-            newInstance.Show();
+            //            String cmd = @"/C C:\Users\JELLAX\source\repos\ssc134\DarkPad\bin\Debug\DarkPad.exe";
+            //            System.Diagnostics.Process.Start("CMD.exe", cmd);
+            System.Diagnostics.Process.Start(@"C:\Users\JELLAX\source\repos\ssc134\DarkPad\bin\Debug\DarkPad.exe");
             isMouseHovered = false;
         }
 
@@ -53,7 +70,8 @@ namespace DarkPad
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.ShowDialog();
             string filepath = dialog.FileName;
-            richTextBox1.Text = System.IO.File.ReadAllText(filepath);
+            if(filepath.Length != 0)
+                richTextBox1.Text = System.IO.File.ReadAllText(filepath);
             isMouseHovered = false;
         }
 
@@ -65,6 +83,8 @@ namespace DarkPad
                 dlg.Filter = "Text Files(*.txt)|*.txt";
                 dlg.ShowDialog();
                 currentFilePath = dlg.FileName;
+                if (currentFilePath.Length == 0)
+                    return;
                 isSaved = true;
             }
         
@@ -81,6 +101,8 @@ namespace DarkPad
             if(isSaved == false)
             {
                 currentFilePath = filePath;
+                if (currentFilePath.Length == 0)
+                    return;
                 isSaved = true;
             }
             System.IO.File.WriteAllText(filePath, richTextBox1.Text);
@@ -137,8 +159,36 @@ namespace DarkPad
 
         private void findToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Feature still in progress", "Snap!", MessageBoxButtons.OK);
-            isMouseHovered = false;
+            //            MessageBox.Show("Feature still in progress", "Snap!", MessageBoxButtons.OK);
+            //            isMouseHovered = false;
+            FindWindow fw = new FindWindow();
+            fw.ShowDialog();
+            pattern = fw.text;
+            caseSensitiveFind = fw.matchCase;
+            int pos;
+            if (pattern.Length != 0)
+            {
+                MessageBox.Show(pattern);
+                if(caseSensitiveFind)
+                {
+                        pos = richTextBox1.Find(pattern, RichTextBoxFinds.MatchCase);
+                }
+                else
+                {
+                    pos = richTextBox1.Find(pattern);
+                }
+                if(pos < 0)
+                {
+                    MessageBox.Show("Pattern doesn't exist");
+                    return;
+                }
+                MessageBox.Show($"pattern found at : {pos}");                
+            }
+        }
+
+        private void Find_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
@@ -273,6 +323,30 @@ namespace DarkPad
         {
             isMouseHovered = false;
         }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+            toolStripStatusLabel1.Text = "Length: " + richTextBox1.SelectionStart.ToString();
+/*            if(isTextSelected)
+            {
+                isTextSelected = false;
+ //               pattern = searchBox.Text;
+                int index = 0; // richTextBox1.SelectionStart;
+                while (index <= richTextBox1.Text.Length - pattern.Length)
+                {
+                    index = richTextBox1.Find(pattern, index, RichTextBoxFinds.None);
+                    if (index == -1)
+                        break;
+                    richTextBox1.SelectionBackColor = currBackColor;
+                    richTextBox1.HideSelection = false;
+                    index += pattern.Length - 1;
+                }
+                richTextBox1.ScrollToCaret();
+                richTextBox1.BackColor = currBackColor;
+                richTextBox1.ForeColor = currFontColor;
+*/
+        }
+        
         #endregion
         #endregion
 
@@ -304,8 +378,84 @@ namespace DarkPad
         }
 
 
+
         #endregion
 
-        
+        #region ButtonPress
+
+
+
+        #endregion
+
+        private void searchButton_Click(object sender, EventArgs e)
+        {
+            pattern = searchBox.Text;
+            int index = 0; // richTextBox1.SelectionStart;
+            while(index <= richTextBox1.Text.Length - pattern.Length)
+            {
+                index = richTextBox1.Find(pattern, index, RichTextBoxFinds.None);
+                if (index == -1)
+                    break;
+                richTextBox1.SelectionBackColor = Color.Blue;
+                richTextBox1.HideSelection = false;
+//                richTextBox1.SelectionStart = index;
+//                richTextBox1.SelectionLength = pattern.Length;
+//                richTextBox1.Select(index, pattern.Length);
+                index += pattern.Length - 1;
+            }
+            richTextBox1.ScrollToCaret();
+            isTextSelected = true;
+        }
+
+        private void findNextStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (pattern.Length == 0)
+                findToolStripMenuItem_Click(sender, e);
+            else
+            {
+                int pos;
+                if(caseSensitiveFind)
+                {
+//                    pos = richTextBox1.Find(pattern, RichTextBoxFinds.MatchCase);
+                    pos = richTextBox1.Find(pattern, richTextBox1.SelectionStart, RichTextBoxFinds.MatchCase);
+                    if (pos == -1)
+                    {
+                        MessageBox.Show("Pattern not found");
+                        return;
+                    }
+                    else
+                    {
+                        richTextBox1.Select(richTextBox1.SelectionStart, pattern.Length);
+                        if (pos + pattern.Length - 1 < richTextBox1.Text.Length - 1)
+                        {
+                            //                            richTextBox1.SelectionStart = pos + pattern.Length;
+                            //                            richTextBox1.Text.cur = pos + pattern.Length;
+                            richTextBox1.SelectionStart = richTextBox1.SelectionStart + pattern.Length;
+                        }
+                        return;
+                    }
+//                    if(pos+pattern.Length-1 < richTextBox1.Text.Length)
+                }
+                else
+                {
+                    pos = richTextBox1.Find(pattern, richTextBox1.SelectionStart, RichTextBoxFinds.None);
+                    if(pos == -1)
+                    {
+                        MessageBox.Show("Pattern not found");
+                        return;
+                    }
+                    else
+                    {
+                        richTextBox1.Select(richTextBox1.SelectionStart, pattern.Length);
+                        if (pos + pattern.Length - 1 < richTextBox1.Text.Length - 1)
+                        {
+                            //                            richTextBox1.SelectionStart = pos + pattern.Length;
+                            richTextBox1.SelectionStart = richTextBox1.SelectionStart + pattern.Length;
+                        }
+                        return;
+                    }
+                }
+            }
+        }
     }
 }
