@@ -17,13 +17,20 @@ namespace DarkPad
         private Color currFontColor = Color.FromArgb(255, 255, 255);
         private Color currBackColor = Color.FromArgb(40, 40, 40);
         private Font currFont = DarkPad.DefaultFont;
-        private bool isStatusStripVisible = true;
+        private bool isStatusStripVisible = false;
         private bool isMouseHovered = false;
+        private bool isFileLabelClicked = false;
 
         public DarkPad()
         {
             InitializeComponent();
         }
+        public DarkPad(string path)
+        {
+            InitializeComponent();
+            richTextBox1.Text = System.IO.File.ReadAllText(path);
+        }
+            
 
         #region Click
   
@@ -32,6 +39,11 @@ namespace DarkPad
         private void fileLabel_Click(object sender, EventArgs e)
         {
             isMouseHovered = true;
+ //           fileLabel.BackColor = Color.FromArgb(45, 45, 45);
+//            fileLabel.ForeColor = Color.White;
+ //           fileLabel.DropDown.BackColor = Color.FromArgb(55, 55, 55);
+//            fileLabel.DropDown.ForeColor = Color.White;
+
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
@@ -43,8 +55,9 @@ namespace DarkPad
 
         private void newWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DarkPad newInstance = new DarkPad();
-            newInstance.Show();
+            //            String cmd = @"/C C:\Users\JELLAX\source\repos\ssc134\DarkPad\bin\Debug\DarkPad.exe";
+            //            System.Diagnostics.Process.Start("CMD.exe", cmd);
+            System.Diagnostics.Process.Start(@"C:\Users\JELLAX\source\repos\ssc134\DarkPad\bin\Debug\DarkPad.exe");
             isMouseHovered = false;
         }
 
@@ -53,7 +66,8 @@ namespace DarkPad
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.ShowDialog();
             string filepath = dialog.FileName;
-            richTextBox1.Text = System.IO.File.ReadAllText(filepath);
+            if(filepath.Length != 0)
+                richTextBox1.Text = System.IO.File.ReadAllText(filepath);
             isMouseHovered = false;
         }
 
@@ -65,6 +79,8 @@ namespace DarkPad
                 dlg.Filter = "Text Files(*.txt)|*.txt";
                 dlg.ShowDialog();
                 currentFilePath = dlg.FileName;
+                if (currentFilePath.Length == 0)
+                    return;
                 isSaved = true;
             }
         
@@ -81,6 +97,8 @@ namespace DarkPad
             if(isSaved == false)
             {
                 currentFilePath = filePath;
+                if (currentFilePath.Length == 0)
+                    return;
                 isSaved = true;
             }
             System.IO.File.WriteAllText(filePath, richTextBox1.Text);
@@ -273,6 +291,11 @@ namespace DarkPad
         {
             isMouseHovered = false;
         }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+            toolStripStatusLabel1.Text = "Length: " + richTextBox1.SelectionStart.ToString();
+        }
         #endregion
         #endregion
 
@@ -304,8 +327,14 @@ namespace DarkPad
         }
 
 
+
         #endregion
 
-        
+
+        #region ButtonPress
+
+
+
+        #endregion
     }
 }

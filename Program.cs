@@ -12,11 +12,19 @@ namespace DarkPad
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(String[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new DarkPad());
+            if(args.Length == 0)
+               Application.Run(new DarkPad());
+            else
+            {
+                for(int i=0; i<args.Length; ++i)
+                {
+                    Application.Run(new DarkPad(args[i]));
+                }
+            }
         }
     }
 }
