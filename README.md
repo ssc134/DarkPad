@@ -1,6 +1,8 @@
 # DarkPad
 ___
 A simple and lightweight alternative to Windows default notepad, with a **Dark Theme**.
+
+
 ![](https://raw.githubusercontent.com/ssc134/DarkPad/master/Preview.png)
 
 # Usage
